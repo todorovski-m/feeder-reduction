@@ -1,0 +1,43 @@
+Clear
+Set DefaultBaseFrequency=60
+
+new circuit.IEEE13Nodeckt
+~ basekv=115 pu=1.0001 phases=3 bus1=SourceBus
+~ Angle=30
+~ MVAsc3=20000 MVASC1=21000
+
+New Transformer.Sub Phases=3 Windings=2   XHL=(8 1000 /)
+~ wdg=1 bus=SourceBus   conn=delta  kv=115  kva=5000   %r=(.5 1000 /)
+~ wdg=2 bus=650             conn=wye    kv=4.16  kva=5000   %r=(.5 1000 /)
+
+New Transformer.Reg1 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666]
+~ Buses=[650.1 RG60.1] kVs=[2.4  2.4] %LoadLoss=0.01
+new regcontrol.Reg1  transformer=Reg1 winding=2  vreg=122  band=2  ptratio=20 ctprim=700  R=3   X=9
+
+New Transformer.Reg2 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666]
+~ Buses=[650.2 RG60.2] kVs=[2.4  2.4] %LoadLoss=0.01
+new regcontrol.Reg2  transformer=Reg2 winding=2  vreg=122  band=2  ptratio=20 ctprim=700  R=3   X=9
+
+New Transformer.Reg3 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666]
+~ Buses=[650.3 RG60.3] kVs=[2.4  2.4] %LoadLoss=0.01
+new regcontrol.Reg3  transformer=Reg3 winding=2  vreg=122  band=2  ptratio=20 ctprim=700  R=3   X=9
+
+New Linecode.mtx_eq nphases=3
+~ rmatrix = [0.19811715279757863 | 0.08912818240585205 0.19288378383443985 | 0.09040209140197478 0.0878687010722217 0.19515164432884088]
+~ xmatrix = [0.5871817543041328 | 0.2893857210940061 0.6043999746432074 | 0.24437764579231494 0.2220667837692869 0.5969137716364736]
+
+New Line.eq_line Phases=3 Bus1=rg60 Bus2=680 LineCode=mtx_eq Length=1
+
+New Generator.gen680  Bus1=680  kV=4.16  kW=1000  PF=1
+
+New Load.rg60-1 Bus1=rg60.1 Phases=1 Conn=Wye Model=1 kV=2.4 kW=-50.619421905137564 kvar=-105.35851464231675
+New Load.rg60-2 Bus1=rg60.2 Phases=1 Conn=Wye Model=1 kV=2.4 kW=232.0892142295443 kvar=57.28766283954957
+New Load.rg60-3 Bus1=rg60.3 Phases=1 Conn=Wye Model=1 kV=2.4 kW=-3.5096609195294852 kvar=0.14290973058794293
+
+New Load.680-1 Bus1=680.1 Phases=1 Conn=Wye Model=1 kV=2.4 kW=1276.2421022167314 kvar=633.8519114704496
+New Load.680-2 Bus1=680.2 Phases=1 Conn=Wye Model=1 kV=2.4 kW=751.819218052376 kvar=294.810113135842
+New Load.680-3 Bus1=680.3 Phases=1 Conn=Wye Model=1 kV=2.4 kW=1268.7355131804322 kvar=540.7469614181716
+
+Set Voltagebases=[115, 4.16]
+calcv
+Solve
