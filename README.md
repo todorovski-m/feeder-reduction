@@ -1,5 +1,7 @@
 # Introduction
 
+[Go to full paper](https://ieeexplore.ieee.org/document/10384771)
+
 High-resolution power flow simulations for the detailed distribution system are
 resource-intensive and time-consuming. In the past, various methods have been
 proposed to create a simplified equivalent circuit while preserving essential
